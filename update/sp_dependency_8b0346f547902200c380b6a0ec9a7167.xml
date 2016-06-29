@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_dependency">
+    <sp_dependency action="INSERT_OR_UPDATE">
+        <module>ngMaterial</module>
+        <name>ngMaterial</name>
+        <page_load>true</page_load>
+        <sys_class_name>sp_dependency</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-06-29 16:09:22</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>8b0346f547902200c380b6a0ec9a7167</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ngMaterial</sys_name>
+        <sys_package display_value="Helsinki Webinar" source="x_snc_helsinki_web">33aaac110f9866009339ab78b1050e47</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Helsinki Webinar">33aaac110f9866009339ab78b1050e47</sys_scope>
+        <sys_update_name>sp_dependency_8b0346f547902200c380b6a0ec9a7167</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-06-29 16:09:22</sys_updated_on>
+    </sp_dependency>
+</record_update>

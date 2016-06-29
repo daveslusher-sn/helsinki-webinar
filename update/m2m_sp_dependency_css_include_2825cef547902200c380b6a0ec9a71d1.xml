@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="m2m_sp_dependency_css_include">
+    <m2m_sp_dependency_css_include action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <sp_css_include display_value="angular-material.min.css">6205cef547902200c380b6a0ec9a71eb</sp_css_include>
+        <sp_dependency display_value="ngMaterial">8b0346f547902200c380b6a0ec9a7167</sp_dependency>
+        <sys_class_name>m2m_sp_dependency_css_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-06-29 16:18:17</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>2825cef547902200c380b6a0ec9a71d1</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>angular-material.min.css.ngMaterial</sys_name>
+        <sys_package display_value="Helsinki Webinar" source="x_snc_helsinki_web">33aaac110f9866009339ab78b1050e47</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Helsinki Webinar">33aaac110f9866009339ab78b1050e47</sys_scope>
+        <sys_update_name>m2m_sp_dependency_css_include_2825cef547902200c380b6a0ec9a71d1</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-06-29 16:18:17</sys_updated_on>
+    </m2m_sp_dependency_css_include>
+</record_update>
