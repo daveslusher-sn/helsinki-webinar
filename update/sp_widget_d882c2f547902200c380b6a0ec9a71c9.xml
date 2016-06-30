@@ -53,12 +53,13 @@
 		var incident = {};
 		incident.short_description = gr.getDisplayValue('short_description');
 		incident.number = gr.getDisplayValue('number');
-		incident.assigned_to = gr.getDisplayValue('assigned_to');
 		incident.priority =  gr.getDisplayValue('priority');
 		incident.opened_by = gr.getDisplayValue('opened_by');
 		incident.state = gr.getDisplayValue('state');
+
 		incident.sys_id = gr.getUniqueValue();
 		incident.active = gr.getDisplayValue('active');
+		incident.assigned_to = gr.getDisplayValue('assigned_to');
 		
 		// Get the sys_id of the opened_by value, then
 		// see if they have an avatar uploaded. Takes some
@@ -70,7 +71,7 @@
 			gr2.addEncodedQuery(encoded_query);												
 			gr2.query();
 			if (gr2.next()) {
-				incident.avatarUrl = "/" +gr2.getValue('sys_id') + ".iix";
+				incident.avatarUrl = "/" +gr2.getValue('sys_id') + ".iix?t=small";
 			}
 		}		
 		data.incidents.push(incident);		
@@ -83,7 +84,7 @@
         <sys_created_on>2016-06-29 16:07:36</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d882c2f547902200c380b6a0ec9a71c9</sys_id>
-        <sys_mod_count>44</sys_mod_count>
+        <sys_mod_count>45</sys_mod_count>
         <sys_name>Incident Cards</sys_name>
         <sys_package display_value="Helsinki Webinar" source="x_snc_helsinki_web">33aaac110f9866009339ab78b1050e47</sys_package>
         <sys_policy/>
@@ -91,7 +92,7 @@
         <sys_scope display_value="Helsinki Webinar">33aaac110f9866009339ab78b1050e47</sys_scope>
         <sys_update_name>sp_widget_d882c2f547902200c380b6a0ec9a71c9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2016-06-30 04:02:20</sys_updated_on>
+        <sys_updated_on>2016-06-30 12:42:03</sys_updated_on>
         <template><![CDATA[<div>
   <div flex>
   <div layout="row">Show values
