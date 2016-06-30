@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
-        <client_script><![CDATA[function() {
+        <client_script><![CDATA[function($scope, spUtil, $http) {
   /* widget controller */
   var c = this;
+	
+	// this makes the UI watch the data tables and update on changes
+	spUtil.recordWatch($scope, "incident", "", function(name, data) {
+		spUtil.update($scope);
+	});
+
+	
+	// the handler for clicks on the "Close" button
+	// it calls the Table REST API to update state to Closed
+	$scope.closeIncident = function(event) {
+	   console.log("button clicked\n" + event.currentTarget.id);
+		$http({
+			method: 'PUT',
+			url: '/api/now/table/incident/'+event.currentTarget.id,
+			headers: {'Content-Type' : 'application/json'},
+			data : {'state': '7'}
+		})
+	};
+
+
 }]]></client_script>
         <controller_as>c</controller_as>
         <css/>
@@ -21,9 +41,41 @@
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
-  /* populate the 'data' object */
-  /* e.g., data.table = $sp.getValue('table'); */
 
+	data.incidents = [];
+	var gr = new GlideRecord('incident');
+	gr.orderByDesc('sys_updated_on')
+	gr.query();
+	while (gr.next()) {
+						
+
+		// fill the JSON objects to pass to the HTML template
+		var incident = {};
+		incident.short_description = gr.getDisplayValue('short_description');
+		incident.number = gr.getDisplayValue('number');
+		incident.assigned_to = gr.getDisplayValue('assigned_to');
+		incident.priority =  gr.getDisplayValue('priority');
+		incident.opened_by = gr.getDisplayValue('opened_by');
+		incident.state = gr.getDisplayValue('state');
+		incident.sys_id = gr.getUniqueValue();
+		incident.active = gr.getDisplayValue('active');
+		
+		// Get the sys_id of the opened_by value, then
+		// see if they have an avatar uploaded. Takes some
+		// weirdness via sys_attachment to determine that
+		var opened_by_ID = gr.getValue('opened_by');
+		if (opened_by_ID != "") {
+		  var gr2 = new GlideRecord('sys_attachment');
+			var encoded_query = 'file_name=photo^table_name=ZZ_YYsys_user^table_sys_id='+opened_by_ID;
+			gr2.addEncodedQuery(encoded_query);												
+			gr2.query();
+			if (gr2.next()) {
+				incident.avatarUrl = "/" +gr2.getValue('sys_id') + ".iix";
+			}
+		}		
+		data.incidents.push(incident);		
+	}
+	
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -31,7 +83,7 @@
         <sys_created_on>2016-06-29 16:07:36</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d882c2f547902200c380b6a0ec9a71c9</sys_id>
-        <sys_mod_count>6</sys_mod_count>
+        <sys_mod_count>44</sys_mod_count>
         <sys_name>Incident Cards</sys_name>
         <sys_package display_value="Helsinki Webinar" source="x_snc_helsinki_web">33aaac110f9866009339ab78b1050e47</sys_package>
         <sys_policy/>
@@ -39,25 +91,46 @@
         <sys_scope display_value="Helsinki Webinar">33aaac110f9866009339ab78b1050e47</sys_scope>
         <sys_update_name>sp_widget_d882c2f547902200c380b6a0ec9a71c9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2016-06-29 16:23:49</sys_updated_on>
+        <sys_updated_on>2016-06-30 04:02:20</sys_updated_on>
         <template><![CDATA[<div>
-  <md-content class="md-padding" layout="column"  >
-      <md-card  ng-repeat="incident in c.data.incidents ">
+  <div flex>
+  <div layout="row">Show values
+     <md-checkbox ng-model="showOpenedBy" >Opened By</md-checkbox>
+     <md-checkbox ng-model="showPriority" >Priority</md-checkbox>
+     <md-checkbox ng-model="showState" >State</md-checkbox>
+  </div>
+  <md-content class="md-padding" layout="column" class="col-md-6" >
+    <div class="md-title">Active</div>
+      <md-card  ng-repeat="incident in c.data.incidents | filter: {active : 'true' }  ">
         <md-card-title> 
           <md-card-title-text>
             <span class="md-headline">{{incident.short_description}}</span>
             <span class="md-subhead" >{{incident.number}}</span>
-            <span class="md-subhead" >{{incident.opened_by}}</span>
-            <span class="md-subhead" >{{incident.priority}}</span>
-            <span class="md-subhead" >{{incident.state}}</span>
+            <span class="md-subhead" ng-if="showOpenedBy" >{{incident.opened_by}}<img ng-src="{{incident.avatarUrl}}" class="md-card-image"></span>
+            <span class="md-subhead" ng-if="showPriority" >{{incident.priority}}</span>
+            <span class="md-subhead" ng-if="showState">{{incident.state}}</span>
           </md-card-title-text>
       </md-card-title>
         <md-card-actions layout="column" >
-          <md-button >Close </md-button>
+          <md-button id="{{incident.sys_id}}" ng-click="closeIncident($event)">Close </md-button>
         </md-card-actions>
 	</md-card>
     </md-content>
-
+      <md-content class="md-padding" layout="column" class="col-md-6">
+        <div class="md-title">Closed</div>
+      <md-card ng-repeat="incident in c.data.incidents | filter: {active : '!true' }">
+        <md-card-title> 
+          <md-card-title-text>
+            <span class="md-headline">{{incident.short_description}}</span>
+            <span class="md-subhead" >{{incident.number}}</span>
+            <span class="md-subhead" ng-if="showOpenedBy" >{{incident.opened_by}}<img ng-src="{{incident.avatarUrl}}" class="md-card-image"></span>
+            <span class="md-subhead" ng-if="showPriority" >{{incident.priority}}</span>
+            <span class="md-subhead" ng-if="showState">{{incident.state}}</span>
+          </md-card-title-text>
+      </md-card-title>
+	</md-card>
+    </md-content>
+  </div>
 </div>]]></template>
     </sp_widget>
 </record_update>
